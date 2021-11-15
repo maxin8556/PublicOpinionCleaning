@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 import time
-from win32com import client
+# from win32com import client
 import docx
 import re
 import logging
@@ -68,48 +68,48 @@ class CleanData(object):
             "fileContent": "",
         }
 
-    # 转换docx类型,把文件doc为后缀的传入
-    def convertDocx(self, file_doc):
-        """
-        :param file: 需要转换的文件名称
-        :return:
-        """
-        try:
-            word = client.Dispatch('Word.Application')
-            # 把文件名称路径传入方法中
-            path = self.files_format.format(file_doc)
-            # 目标路径下的文件
-            doc = word.Documents.Open(path)
-            # 转换后的文件地址  先把 .doc 后缀名 删除
-            modify_suffix = file_doc.replace('.doc', '')
-            # 转化后路径下的文件
-            new_fileName = self.files_result.format(modify_suffix)
-            # 12 转换成docx模式
-            doc.SaveAs(new_fileName, 12)
-            doc.Close()
-            word.Quit()
-            return True
-        except:
-            logging.info("转换失败")
-            return False
-
-    # 先转换docx文件,再删除转换后的 doc文件
-    def removeDocx(self):
-        for file in self.file_list:
-            if file.endswith(".doc"):
-                file_doc = file
-                logging.info(file_doc, "=====>这是doc文件,需要转换")
-                # 转换成docx
-                file_docx = self.convertDocx(file_doc)
-                if file_docx:
-                    # 转换成功之后删除  file 等于 转换之前的doc文件
-                    logging.info("转换成功")
-                    os.remove(self.files_format.format(file))
-                    logging.info("成功删除doc文件")
-                else:
-                    logging.info("没有转换成功")
-        # 转换完成之后,原doc文件删除,只保留docx的
-        print(self.file_list)
+    # # 转换docx类型,把文件doc为后缀的传入
+    # def convertDocx(self, file_doc):
+    #     """
+    #     :param file: 需要转换的文件名称
+    #     :return:
+    #     """
+    #     try:
+    #         word = client.Dispatch('Word.Application')
+    #         # 把文件名称路径传入方法中
+    #         path = self.files_format.format(file_doc)
+    #         # 目标路径下的文件
+    #         doc = word.Documents.Open(path)
+    #         # 转换后的文件地址  先把 .doc 后缀名 删除
+    #         modify_suffix = file_doc.replace('.doc', '')
+    #         # 转化后路径下的文件
+    #         new_fileName = self.files_result.format(modify_suffix)
+    #         # 12 转换成docx模式
+    #         doc.SaveAs(new_fileName, 12)
+    #         doc.Close()
+    #         word.Quit()
+    #         return True
+    #     except:
+    #         logging.info("转换失败")
+    #         return False
+    #
+    # # 先转换docx文件,再删除转换后的 doc文件
+    # def removeDocx(self):
+    #     for file in self.file_list:
+    #         if file.endswith(".doc"):
+    #             file_doc = file
+    #             logging.info(file_doc, "=====>这是doc文件,需要转换")
+    #             # 转换成docx
+    #             file_docx = self.convertDocx(file_doc)
+    #             if file_docx:
+    #                 # 转换成功之后删除  file 等于 转换之前的doc文件
+    #                 logging.info("转换成功")
+    #                 os.remove(self.files_format.format(file))
+    #                 logging.info("成功删除doc文件")
+    #             else:
+    #                 logging.info("没有转换成功")
+    #     # 转换完成之后,原doc文件删除,只保留docx的
+    #     print(self.file_list)
 
     # 获取整个doc文档内容
     def get_text(self, file_path):
@@ -127,7 +127,7 @@ class CleanData(object):
     def clean(self):
         # 先转换 docx 文件,再删除转换后的 doc 文件
         items = self.items.copy()
-        self.removeDocx()
+        # self.removeDocx()
         # 开始对目标文件夹下的docx文件进行清洗
         for file in self.file_list:
             # 文件全部内容
