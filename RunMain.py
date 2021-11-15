@@ -1,6 +1,13 @@
+import logging
+import time
+
 from operation.DocxCleanMain import CleanData
 from operation.ExtractData import ExtractData
+import logging
+from Utils.logcfg import LOGGING_CONFIG
+from Utils.Logger import LoggerSingleton
 
+LoggerSingleton().init_dict_config(LOGGING_CONFIG)
 
 class Main(object):
     def __init__(self):
@@ -16,4 +23,7 @@ class Main(object):
 
 if __name__ == '__main__':
     run = Main()
-    run.run()
+    while True:
+        run.run()
+        time.sleep(1200)
+        logging.info("休息中")
