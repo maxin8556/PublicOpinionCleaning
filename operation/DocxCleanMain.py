@@ -38,7 +38,7 @@ class CleanData(object):
         else:
             self.target_folders = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx"
             # 方便读取存入的变量
-            self.files_format = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx"
+            self.files_format = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx\{}"
             # 转换之后的目标文件
             self.files_result = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx\{}.docx"
             # 查看目标问价夹下有哪些文件
