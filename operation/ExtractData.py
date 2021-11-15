@@ -23,11 +23,11 @@ class ExtractData(object):
             # 查看目标问价夹下有哪些文件
             self.file_list = os.listdir(self.readPath)
         else:
-            self.readPath = ""
-            self.pathFormat = ""
-            self.afterPathFormat = ""
+            self.readPath = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson"
+            self.pathFormat = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson\{}"
+            self.afterPathFormat = "/root/mx/PublicOpinionCleaning/Data/AfterCleanJson\{}"
             # 最终数据的文件夹
-            self.resultJson = ""
+            self.resultJson = "/root/mx/PublicOpinionCleaning/ResultData"
             # 查看目标问价夹下有哪些文件
             self.file_list = os.listdir(self.readPath)
 
