@@ -135,6 +135,7 @@ class CleanData(object):
         for file in self.file_list:
             # 文件全部内容
             content = self.get_text(self.files_format.format(file))
+            print(content)
             # 文件名称
             fileName = file.replace(".docx", "")
             logging.info("开始清洗")
@@ -188,11 +189,17 @@ class CleanData(object):
             fileContent_result = content
             items['fileContent'] = fileContent_result
 
+            print(items)
+
             # 把清洗好的数据 写入文件中
+            print("开始清洗")
             self.getFile(items=items)
+            print("清洗结束")
 
             # 写入一个文件 就把原docx文件给一到另一个文件夹下
+            print("开始移动")
             self.moveFile(file)
+            print("移动结束")
 
     # 需要把写入好的docx文件给移除或者移动目录
     def moveFile(self, fileName):
