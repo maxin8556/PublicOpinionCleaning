@@ -25,5 +25,7 @@ if __name__ == '__main__':
     run = Main()
     while True:
         run.run()
-        time.sleep(1200)
         logging.info("休息中")
+        time.sleep(1200)
+        logging.info("休息20分钟结束")
+
