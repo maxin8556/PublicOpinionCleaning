@@ -32,7 +32,7 @@ class CleanData(object):
             # 转换成json之后的docx文件需要移动到AfterCleanDocx,防止运行时不停的读写
             self.after_docx = r"D:\MaXin-Study\2021-10-3\DataClean\Data\AfterCleanDocx\{}"
         else:
-            self.target_folders = ""
+            self.target_folders = "/root/mx"
             # 方便读取存入的变量
             self.files_format = ""
             # 转换之后的目标文件

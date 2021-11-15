@@ -2,11 +2,6 @@ from operation.DocxCleanMain import CleanData
 from operation.ExtractData import ExtractData
 
 
-
-
-
-
-
 class Main(object):
     def __init__(self):
         self.CleanData = CleanData()
