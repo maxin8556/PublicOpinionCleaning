@@ -17,6 +17,7 @@ class Main(object):
     def run(self):
         # 先遍历文件并清洗文件
         self.CleanData.run()
+        time.sleep(120)
         # 再把 清理之后的数据写入需要的格式中
         self.ExtractData.run()
 
