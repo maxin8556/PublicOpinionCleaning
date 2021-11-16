@@ -133,6 +133,7 @@ class CleanData(object):
         # self.removeDocx()
         # 开始对目标文件夹下的docx文件进行清洗
         for file in self.file_list:
+            print(file)
             # 文件全部内容
             content = self.get_text(self.files_format.format(file))
             print(content)
