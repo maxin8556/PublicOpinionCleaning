@@ -38,15 +38,15 @@ class CleanData(object):
         else:
             self.target_folders = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx"
             # 方便读取存入的变量
-            self.files_format = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx\{}"
+            self.files_format = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx/{}"
             # 转换之后的目标文件
-            self.files_result = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx\{}.docx"
+            self.files_result = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx/{}.docx"
             # 查看目标问价夹下有哪些文件
             self.file_list = os.listdir(self.target_folders)
             #  清洗之后并转换成json的目标文件
-            self.json_path = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson\{}.json"
+            self.json_path = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson/{}.json"
             # 转换成json之后的docx文件需要移动到AfterCleanDocx,防止运行时不停的读写
-            self.after_docx = "/root/mx/PublicOpinionCleaning/Data/AfterCleanDocx\{}"
+            self.after_docx = "/root/mx/PublicOpinionCleaning/Data/AfterCleanDocx/{}"
         # 暂时以字典的方式存储
         self.items = {
             # 文件名称
@@ -135,10 +135,7 @@ class CleanData(object):
         for file in self.file_list:
             print(file)
             # 文件全部内容
-            # content = self.get_text(self.files_format.format(file))
-            # （涉警）网民反映举报后被询问身份信息.docx
-            content = self.get_text(r"/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx/（涉警）网民反映举报后被询问身份信息.docx")
-            print(content)
+            content = self.get_text(self.files_format.format(file))
             # 文件名称
             fileName = file.replace(".docx", "")
             logging.info("开始清洗")
