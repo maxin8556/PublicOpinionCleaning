@@ -17,7 +17,7 @@ class Main(object):
     def run(self):
         # 先遍历文件并清洗文件
         self.CleanData.run()
-        time.sleep(120)
+        time.sleep(10)
         # 再把 清理之后的数据写入需要的格式中
         self.ExtractData.run()
 
@@ -27,6 +27,6 @@ if __name__ == '__main__':
     while True:
         run.run()
         logging.info("休息中")
-        time.sleep(1200)
-        logging.info("休息20分钟结束")
+        time.sleep(60)
+        logging.info("休息60秒结束")
 

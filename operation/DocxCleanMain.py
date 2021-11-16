@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append("../")
 
 import datetime
@@ -132,74 +133,73 @@ class CleanData(object):
         items = self.items.copy()
         # self.removeDocx()
         # 开始对目标文件夹下的docx文件进行清洗
-        for file in self.file_list:
-            print(file)
-            # 文件全部内容
-            content = self.get_text(self.files_format.format(file))
-            # 文件名称
-            fileName = file.replace(".docx", "")
-            logging.info("开始清洗")
-            # 文件名称
-            fileName_result = fileName
-            items['fileName'] = fileName_result
-            # 标签
-            fileLabel_result = re.findall('[（(](涉.*)[）)]', fileName_result)
-            if fileLabel_result:
-                items['label'] = fileLabel_result[0]
+        if self.file_list:
+            for file in self.file_list:
+                # 文件全部内容
+                content = self.get_text(self.files_format.format(file))
+                # 文件名称
+                fileName = file.replace(".docx", "")
+                logging.info("开始清洗")
+                # 文件名称
+                fileName_result = fileName
+                items['fileName'] = fileName_result
+                # 标签
+                fileLabel_result = re.findall('[（(](涉.*)[）)]', fileName_result)
+                if fileLabel_result:
+                    items['label'] = fileLabel_result[0]
 
-            # 舆情类型
-            fileType_result = re.findall("(即时.*)", content)
-            if fileType_result:
-                items['fileType'] = fileType_result[0]
+                # 舆情类型
+                fileType_result = re.findall("(即时.*)", content)
+                if fileType_result:
+                    items['fileType'] = fileType_result[0]
 
-            # 标题
-            title_result = re.findall("(网民.*)", content)
-            if title_result:
-                items['title'] = title_result[0]
+                # 标题
+                title_result = re.findall("(网民.*)", content)
+                if title_result:
+                    items['title'] = title_result[0]
 
-            # 时间
-            time_result = re.findall("(.*月.*日)[，,]", content)
-            if time_result:
-                # 时间需要转化 由10月30日 转化成时间 2021-10-30 00:00:00
-                time = self.conversionTime(time_result[0])
-                items['time'] = str(time)
+                # 时间
+                time_result = re.findall("(.*月.*日)[，,]", content)
+                if time_result:
+                    # 时间需要转化 由10月30日 转化成时间 2021-10-30 00:00:00
+                    time = self.conversionTime(time_result[0])
+                    items['time'] = str(time)
 
+                # 网名
+                nickname_result = re.findall('网民“(.*?)”在', content)
+                if nickname_result:
+                    items['nickname'] = nickname_result[0]
 
-            # 网名
-            nickname_result = re.findall('网民“(.*?)”在', content)
-            if nickname_result:
-                items['nickname'] = nickname_result[0]
+                # 信息来源
+                infoSource_result = re.findall('在“(.*?)”[发贴称发贴称]', content)
+                if infoSource_result:
+                    items['infoSource'] = infoSource_result[0]
 
-            # 信息来源
-            infoSource_result = re.findall('在“(.*?)”[发贴称发贴称]', content)
-            if infoSource_result:
-                items['infoSource'] = infoSource_result[0]
+                # 发布内容
+                content_result = re.findall('[发贴称发贴称][，,:：](.*?)[\s]原文链接', content)
+                if content_result:
+                    items['content'] = content_result[0]
 
-            # 发布内容
-            content_result = re.findall('[发贴称发贴称][，,:：](.*?)[\s]原文链接', content)
-            if content_result:
-                items['content'] = content_result[0]
+                # 原文链接
+                link_result = re.findall('(http[s]://.*)', content)
+                if link_result:
+                    items['link'] = link_result[0]
 
-            # 原文链接
-            link_result = re.findall('(http[s]://.*)', content)
-            if link_result:
-                items['link'] = link_result[0]
+                # 原文内容
+                fileContent_result = content
+                items['fileContent'] = fileContent_result
 
-            # 原文内容
-            fileContent_result = content
-            items['fileContent'] = fileContent_result
+                # 把清洗好的数据 写入文件中
+                logging.info("开始清洗...")
+                self.getFile(items=items)
+                logging.info("清洗结束...")
 
-            print(items)
-
-            # 把清洗好的数据 写入文件中
-            print("开始清洗")
-            self.getFile(items=items)
-            print("清洗结束")
-
-            # 写入一个文件 就把原docx文件给一到另一个文件夹下
-            print("开始移动")
-            self.moveFile(file)
-            print("移动结束")
+                # 写入一个文件 就把原docx文件给一到另一个文件夹下
+                logging.info("开始移动文件...")
+                self.moveFile(file)
+                logging.info("清洗结束...")
+        else:
+            logging.info("没有文件可以清洗")
 
     # 需要把写入好的docx文件给移除或者移动目录
     def moveFile(self, fileName):
@@ -215,9 +215,8 @@ class CleanData(object):
             json.dump(items, f_json, ensure_ascii=False, sort_keys=True, indent=4)
             logging.info("加载入文件完成...")
 
-
     # 转换时间
-    def conversionTime(self,a_time):
+    def conversionTime(self, a_time):
         year = datetime.datetime.now().strftime('%Y')
         time_time = a_time.replace('月', '-').replace('日', '')
 
