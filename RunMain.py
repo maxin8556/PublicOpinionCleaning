@@ -1,6 +1,6 @@
 import logging
 import time
-
+from settings.setting import timeSleep
 from operation.DocxCleanMain import CleanData
 from operation.ExtractData import ExtractData
 import logging
@@ -28,5 +28,5 @@ if __name__ == '__main__':
     while True:
         run.run()
         logging.info("休息中")
-        time.sleep(60)
+        time.sleep(timeSleep)
 
