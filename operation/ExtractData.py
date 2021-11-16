@@ -1,4 +1,6 @@
 import sys
+import time
+
 sys.path.append("../")
 
 import json
@@ -23,16 +25,13 @@ class ExtractData(object):
             self.afterPathFormat = r"D:\MaXin-Study\2021-10-3\DataClean\Data\AfterCleanJson\{}"
             # 最终数据的文件夹
             self.resultJson = r"D:\MaXin-Study\2021-10-3\DataClean\ResultData\result.json"
-            # 查看目标问价夹下有哪些文件
-            self.file_list = os.listdir(self.readPath)
+
         else:
             self.readPath = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson"
             self.pathFormat = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson/{}"
             self.afterPathFormat = "/root/mx/PublicOpinionCleaning/Data/AfterCleanJson/{}"
             # 最终数据的文件夹
             self.resultJson = "/root/mx/PublicOpinionCleaning/ResultData/result.json"
-            # 查看目标问价夹下有哪些文件
-            self.file_list = os.listdir(self.readPath)
 
     # 舆情详细数据
     def publicOpinionDetails(self, json_data):
@@ -50,7 +49,6 @@ class ExtractData(object):
         content = json_data['content']
         # 链接
         link = json_data['link']
-        print(link)
         # 文件原本内容
         fileContent = json_data['fileContent']
         details = {
@@ -68,13 +66,15 @@ class ExtractData(object):
     def writeFile(self, results):
         with open(self.resultJson, 'w', encoding='utf8')as fl:
             json.dump(results, fl, ensure_ascii=False, sort_keys=True, indent=4)
-        logging.info("添加数据完成")
+        logging.info("添加数据到result.json完成")
 
     # 需要把写入好的json文件给移除或者移动目录
     def moveFile(self, fileName):
+        logging.info("开始移动BeforeJson文件")
         before_filePath = self.pathFormat.format(fileName)
         after_filePath = self.afterPathFormat.format(fileName)
         shutil.move(before_filePath, after_filePath)
+        logging.info("移动到AfterJson文件下成功")
 
     # 如果需要增加数据,需要先把原本的数据提取出来,再把新的数据添加进去,最后就可以写入了
     def getJson(self, items):
@@ -87,23 +87,23 @@ class ExtractData(object):
     # 提取文件信息 写入信息
     def getInfo(self):
         # 如果该目录下有文件,说明需要清洗,如果没有 就说明文件已经清洗完毕
-        if self.file_list:
+        file_list = os.listdir(self.readPath)
+        if file_list:
             # 如果有文件需要提取
-            for _ in self.file_list:
+            for _ in file_list:
                 path = self.pathFormat.format(_)
                 with open(path, 'r', encoding='utf8')as fl:
                     json_data = json.load(fl)
                 #  获取相对应的需要的数据
-                logging.info(json_data)
                 # 遍历 舆情详细数据 ,转化成json文件
                 details = self.publicOpinionDetails(json_data)
                 # 先读取json文件中内容并提取,然后把新获取的数据增加进去,然后写入文件
                 detailslist = self.getJson(details)
                 resultItems['platformDetails'] = detailslist
+                print(resultItems)
+                self.writeFile(resultItems)
                 # 移动存好的json文件到新的目录下
                 self.moveFile(_)
-                logging.info(resultItems)
-                self.writeFile(resultItems)
         else:
             logging.info("暂时没有文件可以提取")
 
@@ -113,4 +113,6 @@ class ExtractData(object):
 
 if __name__ == '__main__':
     tmp = ExtractData()
-    tmp.run()
+    while True:
+        tmp.run()
+        time.sleep(30)

@@ -29,7 +29,7 @@ class CleanData(object):
             # 转换之后的目标文件
             self.files_result = r"D:\MaXin-Study\2021-10-3\DataClean\Data\BeforeCleanDocx\{}.docx"
             # 查看目标问价夹下有哪些文件
-            self.file_list = os.listdir(self.target_folders)
+            # self.file_list = os.listdir(self.target_folders)
             #  清洗之后并转换成json的目标文件
             self.json_path = r'D:\MaXin-Study\2021-10-3\DataClean\Data\BeforeCleanJson\{}.json'
 
@@ -43,7 +43,7 @@ class CleanData(object):
             # 转换之后的目标文件
             self.files_result = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx/{}.docx"
             # 查看目标问价夹下有哪些文件
-            self.file_list = os.listdir(self.target_folders)
+            # self.file_list = os.listdir(self.target_folders)
             #  清洗之后并转换成json的目标文件
             self.json_path = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson/{}.json"
             # 转换成json之后的docx文件需要移动到AfterCleanDocx,防止运行时不停的读写
@@ -131,10 +131,13 @@ class CleanData(object):
     def clean(self):
         # 先转换 docx 文件,再删除转换后的 doc 文件
         items = self.items.copy()
+        files_list = os.listdir(self.target_folders)
         # self.removeDocx()
         # 开始对目标文件夹下的docx文件进行清洗
-        if self.file_list:
-            for file in self.file_list:
+        if os.listdir(self.target_folders):
+            logging.info("检测到文件夹下有文件存在---------->")
+            print(files_list)
+            for file in files_list:
                 # 文件全部内容
                 content = self.get_text(self.files_format.format(file))
                 # 文件名称
@@ -233,4 +236,6 @@ class CleanData(object):
 
 if __name__ == '__main__':
     tmp = CleanData()
-    tmp.run()
+    while True:
+        tmp.run()
+        time.sleep(30)
