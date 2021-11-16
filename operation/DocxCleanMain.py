@@ -135,7 +135,9 @@ class CleanData(object):
         for file in self.file_list:
             print(file)
             # 文件全部内容
-            content = self.get_text(self.files_format.format(file))
+            # content = self.get_text(self.files_format.format(file))
+            # （涉警）网民反映举报后被询问身份信息.docx
+            content = self.get_text(r"/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx/（涉警）网民反映举报后被询问身份信息.docx")
             print(content)
             # 文件名称
             fileName = file.replace(".docx", "")
