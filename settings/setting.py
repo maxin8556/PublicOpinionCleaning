@@ -23,7 +23,7 @@ PATHFORMAT = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson/{}"
 # format变量
 AFTERPATHFORMAT = "/root/mx/PublicOpinionCleaning/Data/AfterCleanJson/{}"
 # 最终数据的文件夹
-RESULT_JSON = "/home/analysis/upload/result.json"
+RESULT_JSON = "/home/analysis/data/result.json"
 
 
 
