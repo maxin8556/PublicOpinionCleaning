@@ -92,6 +92,7 @@ class ExtractData(object):
         if file_list:
             # 如果有文件需要提取
             for _ in file_list:
+                print(_)
                 if _.endswith('.json'):
                     path = self.pathFormat.format(_)
                     with open(path, 'r', encoding='utf8')as fl:
