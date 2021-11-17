@@ -2,6 +2,7 @@ import sys
 
 sys.path.append("../")
 
+from settings.setting import TARGET_FOLDERS,FILES_FORMAT,FILES_RESULT,JSON_PATH,AFTER_DOCX
 import datetime
 import json
 import os
@@ -37,17 +38,17 @@ class CleanData(object):
             self.after_docx = r"D:\MaXin-Study\2021-10-3\DataClean\Data\AfterCleanDocx\{}"
 
         else:
-            self.target_folders = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx"
+            self.target_folders = TARGET_FOLDERS
             # 方便读取存入的变量
-            self.files_format = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx/{}"
+            self.files_format = FILES_FORMAT
             # 转换之后的目标文件
-            self.files_result = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanDocx/{}.docx"
+            self.files_result = FILES_RESULT
             # 查看目标问价夹下有哪些文件
             # self.file_list = os.listdir(self.target_folders)
             #  清洗之后并转换成json的目标文件
-            self.json_path = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson/{}.json"
+            self.json_path = JSON_PATH
             # 转换成json之后的docx文件需要移动到AfterCleanDocx,防止运行时不停的读写
-            self.after_docx = "/root/mx/PublicOpinionCleaning/Data/AfterCleanDocx/{}"
+            self.after_docx = AFTER_DOCX
         # 暂时以字典的方式存储
         self.items = {
             # 文件名称

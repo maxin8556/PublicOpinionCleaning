@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 from settings.setting import resultItems
+from settings.setting import READJSONPATH,PATHFORMAT,AFTERPATHFORMAT,RESULT_JSON
 import logging
 from Utils.logcfg import LOGGING_CONFIG
 from Utils.Logger import LoggerSingleton
@@ -27,11 +28,11 @@ class ExtractData(object):
             self.resultJson = r"D:\MaXin-Study\2021-10-3\DataClean\ResultData\result.json"
 
         else:
-            self.readPath = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson"
-            self.pathFormat = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson/{}"
-            self.afterPathFormat = "/root/mx/PublicOpinionCleaning/Data/AfterCleanJson/{}"
+            self.readPath = READJSONPATH
+            self.pathFormat = PATHFORMAT
+            self.afterPathFormat = AFTERPATHFORMAT
             # 最终数据的文件夹
-            self.resultJson = "/root/mx/PublicOpinionCleaning/ResultData/result.json"
+            self.resultJson = RESULT_JSON
 
     # 舆情详细数据
     def publicOpinionDetails(self, json_data):
