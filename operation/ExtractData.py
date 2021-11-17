@@ -92,19 +92,22 @@ class ExtractData(object):
         if file_list:
             # 如果有文件需要提取
             for _ in file_list:
-                path = self.pathFormat.format(_)
-                with open(path, 'r', encoding='utf8')as fl:
-                    json_data = json.load(fl)
-                #  获取相对应的需要的数据
-                # 遍历 舆情详细数据 ,转化成json文件
-                details = self.publicOpinionDetails(json_data)
-                # 先读取json文件中内容并提取,然后把新获取的数据增加进去,然后写入文件
-                detailslist = self.getJson(details)
-                resultItems['platformDetails'] = detailslist
-                print(resultItems)
-                self.writeFile(resultItems)
-                # 移动存好的json文件到新的目录下
-                self.moveFile(_)
+                if _.endswith('.json'):
+                    path = self.pathFormat.format(_)
+                    with open(path, 'r', encoding='utf8')as fl:
+                        json_data = json.load(fl)
+                    #  获取相对应的需要的数据
+                    # 遍历 舆情详细数据 ,转化成json文件
+                    details = self.publicOpinionDetails(json_data)
+                    # 先读取json文件中内容并提取,然后把新获取的数据增加进去,然后写入文件
+                    detailslist = self.getJson(details)
+                    resultItems['platformDetails'] = detailslist
+                    print(resultItems)
+                    self.writeFile(resultItems)
+                    # 移动存好的json文件到新的目录下
+                    self.moveFile(_)
+                else:
+                    logging.info("不是清洗之后的json文件")
         else:
             logging.info("暂时没有文件可以提取")
 
