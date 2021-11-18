@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append("../")
-
+import time
 from settings.setting import TARGET_FOLDERS,FILES_FORMAT,FILES_RESULT,JSON_PATH,AFTER_DOCX,ERROR_PATH
 import datetime
 import json
@@ -219,7 +219,7 @@ class CleanData(object):
                     #     shutil.move(filePath, error_filePath)
                     except Exception as msg:
                         logging.exception(logging.exception("出现异常错误{}".format(msg)))
-                        filePath = self.files_format.format(file)
+                        filePath = self.files_format.format(file + time.time())
                         error_filePath = self.error_filePath
                         shutil.move(filePath, error_filePath)
                         logging.error("没有找到该文件或无法解析")
