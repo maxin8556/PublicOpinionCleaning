@@ -24,6 +24,8 @@ PATHFORMAT = "/root/mx/PublicOpinionCleaning/Data/BeforeCleanJson/{}"
 AFTERPATHFORMAT = "/root/mx/PublicOpinionCleaning/Data/AfterCleanJson/{}"
 # 最终数据的文件夹
 RESULT_JSON = "/home/analysis/data/result.json"
+# 无法解析的文件目录
+ERROR_PATH = "/root/mx/PublicOpinionCleaning/Data/ErrorCleanDocx/"
 
 
 

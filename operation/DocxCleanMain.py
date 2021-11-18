@@ -2,7 +2,7 @@ import sys
 
 sys.path.append("../")
 
-from settings.setting import TARGET_FOLDERS,FILES_FORMAT,FILES_RESULT,JSON_PATH,AFTER_DOCX
+from settings.setting import TARGET_FOLDERS,FILES_FORMAT,FILES_RESULT,JSON_PATH,AFTER_DOCX,ERROR_PATH
 import datetime
 import json
 import os
@@ -14,6 +14,7 @@ import re
 import logging
 from Utils.logcfg import LOGGING_CONFIG
 from Utils.Logger import LoggerSingleton
+from settings.errors import *
 
 LoggerSingleton().init_dict_config(LOGGING_CONFIG)
 
@@ -49,6 +50,8 @@ class CleanData(object):
             self.json_path = JSON_PATH
             # 转换成json之后的docx文件需要移动到AfterCleanDocx,防止运行时不停的读写
             self.after_docx = AFTER_DOCX
+            # 无法解析的文件
+            self.error_filePath = ERROR_PATH
         # 暂时以字典的方式存储
         self.items = {
             # 文件名称
@@ -131,85 +134,91 @@ class CleanData(object):
     # 清洗数据之后,存储数据
     def clean(self):
         # 先转换 docx 文件,再删除转换后的 doc 文件
-        try:
-            items = self.items.copy()
-            files_list = os.listdir(self.target_folders)
-            # self.removeDocx()
-            # 开始对目标文件夹下的docx文件进行清洗
-            if os.listdir(self.target_folders):
+        items = self.items.copy()
+        files_list = os.listdir(self.target_folders)
+        # self.removeDocx()
+        # 开始对目标文件夹下的docx文件进行清洗
+        if os.listdir(self.target_folders):
                 logging.info("检测到文件夹下有文件存在---------->")
                 print(files_list)
                 for file in files_list:
-                    if file.endswith('.docx'):
-                        # 文件全部内容
-                        content = self.get_text(self.files_format.format(file))
-                        # 文件名称
-                        fileName = file.replace(".docx", "")
-                        logging.info("开始清洗")
-                        # 文件名称
-                        fileName_result = fileName
-                        items['fileName'] = fileName_result
-                        # 标签
-                        fileLabel_result = re.findall('[（(](涉.*)[）)]', fileName_result)
-                        if fileLabel_result:
-                            items['label'] = fileLabel_result[0]
+                    try:
+                        if file.endswith('.docx'):
+                            # 文件全部内容
+                            content = self.get_text(self.files_format.format(file))
+                            # 文件名称
+                            fileName = file.replace(".docx", "")
+                            logging.info("开始清洗")
+                            # 文件名称
+                            fileName_result = fileName
+                            items['fileName'] = fileName_result
+                            # 标签
+                            fileLabel_result = re.findall('[（(](涉.*)[）)]', fileName_result)
+                            if fileLabel_result:
+                                items['label'] = fileLabel_result[0]
 
-                        # 舆情类型
-                        fileType_result = re.findall("(即时.*)", content)
-                        if fileType_result:
-                            items['fileType'] = fileType_result[0]
+                            # 舆情类型
+                            fileType_result = re.findall("(即时.*)", content)
+                            if fileType_result:
+                                items['fileType'] = fileType_result[0]
 
-                        # 标题
-                        title_result = re.findall("(网民.*)", content)
-                        if title_result:
-                            items['title'] = title_result[0]
+                            # 标题
+                            title_result = re.findall("(网民.*)", content)
+                            if title_result:
+                                items['title'] = title_result[0]
 
-                        # 时间
-                        time_result = re.findall("(.*月.*日)[，,]", content)
-                        if time_result:
-                            # 时间需要转化 由10月30日 转化成时间 2021-10-30 00:00:00
-                            time = self.conversionTime(time_result[0])
-                            items['time'] = str(time)
+                            # 时间
+                            time_result = re.findall("(.*月.*日)[，,]", content)
+                            if time_result:
+                                # 时间需要转化 由10月30日 转化成时间 2021-10-30 00:00:00
+                                time = self.conversionTime(time_result[0])
+                                items['time'] = str(time)
 
-                        # 网名
-                        nickname_result = re.findall('网民“(.*?)”在', content)
-                        if nickname_result:
-                            items['nickname'] = nickname_result[0]
+                            # 网名
+                            nickname_result = re.findall('网民“(.*?)”在', content)
+                            if nickname_result:
+                                items['nickname'] = nickname_result[0]
 
-                        # 信息来源
-                        infoSource_result = re.findall('在“(.*?)”[发贴称发贴称]', content)
-                        if infoSource_result:
-                            items['infoSource'] = infoSource_result[0]
+                            # 信息来源
+                            infoSource_result = re.findall('在“(.*?)”[发贴称发贴称]', content)
+                            if infoSource_result:
+                                items['infoSource'] = infoSource_result[0]
 
-                        # 发布内容
-                        content_result = re.findall('[发贴称发贴称][，,:：](.*?)[\s]原文链接', content)
-                        if content_result:
-                            items['content'] = content_result[0]
+                            # 发布内容
+                            content_result = re.findall('[发贴称发贴称][，,:：](.*?)[\s]原文链接', content)
+                            if content_result:
+                                items['content'] = content_result[0]
 
-                        # 原文链接
-                        link_result = re.findall('(http[s]://.*)', content)
-                        if link_result:
-                            items['link'] = link_result[0]
+                            # 原文链接
+                            link_result = re.findall('(http[s]://.*)', content)
+                            if link_result:
+                                items['link'] = link_result[0]
 
-                        # 原文内容
-                        fileContent_result = content
-                        items['fileContent'] = fileContent_result
+                            # 原文内容
+                            fileContent_result = content
+                            items['fileContent'] = fileContent_result
 
-                        # 把清洗好的数据 写入文件中
-                        logging.info("开始清洗...")
-                        self.getFile(items=items)
-                        logging.info("清洗结束...")
+                            # 把清洗好的数据 写入文件中
+                            logging.info("开始清洗...")
+                            self.getFile(items=items)
+                            logging.info("清洗结束...")
 
-                        # 写入一个文件 就把原docx文件给一到另一个文件夹下
-                        logging.info("开始移动文件...")
-                        self.moveFile(file)
-                        logging.info("清洗结束...")
-                    else:
-                        logging.info("不是docx文件")
-            else:
-                logging.info("没有文件可以清洗")
-        except Exception as msg:
-            logging.exception(logging.exception("出现异常错误{}".format(msg)))
+                            # 写入一个文件 就把原docx文件给一到另一个文件夹下
+                            logging.info("开始移动文件...")
+                            self.moveFile(file)
+                            logging.info("清洗结束...")
+                        else:
+                            logging.info("不是docx文件")
+                    except PackaegNotFoundError:
+                        logging.error("没有找到该文件或无法解析")
+                        filePath = FILES_FORMAT.format(file)
+                        error_filePath = self.error_filePath
+                        shutil.move(filePath, error_filePath)
+                    except Exception as msg:
+                        logging.exception(logging.exception("出现异常错误{}".format(msg)))
+        else:
+            logging.info("没有文件可以清洗")
+
 
     # 需要把写入好的docx文件给移除或者移动目录
     def moveFile(self, fileName):
