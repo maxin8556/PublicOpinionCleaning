@@ -38,7 +38,7 @@ class ExtractData(object):
     def publicOpinionDetails(self, json_data):
         # 文件名称
         # fileName = json_data['fileName']
-        fileName = "预警文件<<{}>>".format(json_data['fileName'])
+        fileName = "预警文件:《{}》".format(json_data['fileName'])
         # 平台
         infoSource = json_data['infoSource']
         # 标题

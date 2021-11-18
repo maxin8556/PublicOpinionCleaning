@@ -215,7 +215,7 @@ class CleanData(object):
                         # # 原文链接
                         # link_result = re.findall('(http[s]://.*)', content)
                         # if link_result:
-                        items['link'] = "预警文件<<{}>>".format(fileName)
+                        items['link'] = "预警文件:《{}》".format(fileName)
                         # else:
                         #     items['link'] = "预警文件<<{}>>".format(fileName)
                         #     # items['link'] = link_result[0]
