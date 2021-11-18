@@ -209,7 +209,7 @@ class CleanData(object):
                             logging.info("清洗结束...")
                         else:
                             logging.info("不是docx文件")
-                    except PackaegNotFoundError:
+                    except PackageNotFoundError:
                         logging.error("没有找到该文件或无法解析")
                         filePath = FILES_FORMAT.format(file)
                         error_filePath = self.error_filePath
