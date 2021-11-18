@@ -53,8 +53,9 @@ class ExtractData(object):
         content = json_data['content']
         # 链接
         link = json_data['link']
+        url = json_data['url']
         r_content = json_data['fileContent']
-        fileContent = r_content.replace('\n\n', '').replace('\n原文链接', '').replace(link, '') + fileName
+        fileContent = r_content.replace('\n\n', '').replace('\n原文链接', '').replace(url, '') + fileName
         details = {
             "title": title,
             "content": content,

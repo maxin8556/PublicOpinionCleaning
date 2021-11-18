@@ -213,12 +213,13 @@ class CleanData(object):
                             items['content'] = ""
 
                         # # 原文链接
-                        # link_result = re.findall('(http[s]://.*)', content)
-                        # if link_result:
+                        link_result = re.findall('(http[s]://.*)', content)
+                        if link_result:
+                            items['url'] = link_result[0]
+                        else:
+                            items['url'] = ""
+
                         items['link'] = "预警文件:《{}》".format(fileName)
-                        # else:
-                        #     items['link'] = "预警文件<<{}>>".format(fileName)
-                        #     # items['link'] = link_result[0]
 
                         # 原文内容
                         fileContent_result = content
