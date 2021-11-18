@@ -37,7 +37,8 @@ class ExtractData(object):
     # 舆情详细数据
     def publicOpinionDetails(self, json_data):
         # 文件名称
-        fileName = json_data['fileName']
+        # fileName = json_data['fileName']
+        fileName = "预警文件<<{}>>".format(json_data['fileName'])
         # 平台
         infoSource = json_data['infoSource']
         # 标题
@@ -53,7 +54,7 @@ class ExtractData(object):
         # 链接
         link = json_data['link']
         r_content = json_data['fileContent']
-        fileContent = r_content.replace('\n\n', '').replace('\n原文链接\n', '').replace(link, '') + fileName
+        fileContent = r_content.replace('\n\n', '').replace('\n原文链接', '').replace(link, '') + fileName
         details = {
             "title": title,
             "content": content,
