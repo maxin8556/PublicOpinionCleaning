@@ -38,6 +38,9 @@ class CleanData(object):
             # 转换成json之后的docx文件需要移动到AfterCleanDocx,防止运行时不停的读写
             self.after_docx = r"D:\MaXin-Study\2021-10-3\DataClean\Data\AfterCleanDocx\{}"
 
+            # 无法解析的文件
+            self.error_filePath = r"D:\MaXin-Study\2021-10-3\DataClean\Data\ErrorCleanDocx"
+
         else:
             self.target_folders = TARGET_FOLDERS
             # 方便读取存入的变量
@@ -209,13 +212,17 @@ class CleanData(object):
                             logging.info("清洗结束...")
                         else:
                             logging.info("不是docx文件")
-                    except PackageNotFoundError:
-                        logging.error("没有找到该文件或无法解析")
-                        filePath = FILES_FORMAT.format(file)
-                        error_filePath = self.error_filePath
-                        shutil.move(filePath, error_filePath)
+                    # except PackageNotFoundError:
+                    #     logging.error("没有找到该文件或无法解析")
+                    #     filePath = FILES_FORMAT.format(file)
+                    #     error_filePath = self.error_filePath
+                    #     shutil.move(filePath, error_filePath)
                     except Exception as msg:
                         logging.exception(logging.exception("出现异常错误{}".format(msg)))
+                        filePath = self.files_format.format(file)
+                        error_filePath = self.error_filePath
+                        shutil.move(filePath, error_filePath)
+                        logging.error("没有找到该文件或无法解析")
         else:
             logging.info("没有文件可以清洗")
 
