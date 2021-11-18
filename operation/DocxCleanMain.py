@@ -154,6 +154,7 @@ class CleanData(object):
                     if file.endswith('.docx'):
                         # 文件全部内容
                         content = self.get_text(self.files_format.format(file))
+                        print(content)
                         # 文件名称
                         fileName = file.replace(".docx", "")
                         logging.info("开始清洗")
@@ -164,16 +165,22 @@ class CleanData(object):
                         fileLabel_result = re.findall('[（(](涉.*)[）)]', fileName_result)
                         if fileLabel_result:
                             items['label'] = fileLabel_result[0]
+                        else:
+                            items['label'] = ""
 
                         # 舆情类型
                         fileType_result = re.findall("(即时.*)", content)
                         if fileType_result:
                             items['fileType'] = fileType_result[0]
+                        else:
+                            items['fileType'] = ""
 
                         # 标题
                         title_result = re.findall("(网民.*)", content)
                         if title_result:
                             items['title'] = title_result[0]
+                        else:
+                            items['title'] = ""
 
                         # 时间
                         time_result = re.findall("(.*月.*日)[，,]", content)
@@ -181,26 +188,37 @@ class CleanData(object):
                             # 时间需要转化 由10月30日 转化成时间 2021-10-30 00:00:00
                             time_item = self.conversionTime(time_result[0])
                             items['time'] = str(time_item)
+                        else:
+                            items['time'] = ""
 
                         # 网名
                         nickname_result = re.findall('网民“(.*?)”在', content)
                         if nickname_result:
                             items['nickname'] = nickname_result[0]
+                        else:
+                            items['nickname'] = ""
 
                         # 信息来源
                         infoSource_result = re.findall('在“(.*?)”[发贴称发贴称]', content)
                         if infoSource_result:
                             items['infoSource'] = infoSource_result[0]
+                        else:
+                            items['infoSource'] = ""
 
                         # 发布内容
                         content_result = re.findall('[发贴称发贴称][，,:：](.*?)[\s]原文链接', content)
                         if content_result:
                             items['content'] = content_result[0]
+                        else:
+                            items['content'] = ""
 
                         # 原文链接
                         link_result = re.findall('(http[s]://.*)', content)
                         if link_result:
                             items['link'] = link_result[0]
+                        else:
+                            items['link'] = "预警文件<<{}>>".format(fileName)
+                            # items['link'] = link_result[0]
 
                         # 原文内容
                         fileContent_result = content

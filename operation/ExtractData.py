@@ -8,7 +8,7 @@ import os
 import re
 import shutil
 from settings.setting import resultItems
-from settings.setting import READJSONPATH,PATHFORMAT,AFTERPATHFORMAT,RESULT_JSON
+from settings.setting import READJSONPATH, PATHFORMAT, AFTERPATHFORMAT, RESULT_JSON
 import logging
 from Utils.logcfg import LOGGING_CONFIG
 from Utils.Logger import LoggerSingleton
@@ -36,6 +36,8 @@ class ExtractData(object):
 
     # 舆情详细数据
     def publicOpinionDetails(self, json_data):
+        # 文件名称
+        fileName = json_data['fileName']
         # 平台
         infoSource = json_data['infoSource']
         # 标题
@@ -50,8 +52,8 @@ class ExtractData(object):
         content = json_data['content']
         # 链接
         link = json_data['link']
-        # 文件原本内容
-        fileContent = json_data['fileContent']
+        r_content = json_data['fileContent']
+        fileContent = r_content.replace('\n\n', '').replace('\n原文链接\n', '').replace(link, '') + fileName
         details = {
             "title": title,
             "content": content,
