@@ -3,7 +3,7 @@ import sys
 sys.path.append("../")
 
 from settings.setting import TARGET_FOLDERS, FILES_FORMAT, FILES_RESULT, JSON_PATH, AFTER_DOCX, ERROR_PATH, \
-    ERROR_PATH_FORMAT, ADDRESS, TIME_STAMP
+    ERROR_PATH_FORMAT, ADDRESS
 import datetime
 import json
 import os
@@ -19,6 +19,8 @@ from settings.CleanRules import *
 
 LoggerSingleton().init_dict_config(LOGGING_CONFIG)
 
+t = time.time()
+TIME_STAMP = int(round(t * 1000))
 
 # 清洗数据写入json文件中
 class CleanData(object):

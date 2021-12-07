@@ -2,7 +2,7 @@ import sys
 import time
 
 sys.path.append("../")
-
+import copy
 import json
 import os
 import re
@@ -41,6 +41,7 @@ class ExtractData(object):
             self.analysis_result = ANALYSIS_RESULT
             # 预警
             self.warning_result = WARNING_RESULT
+
 
     # 舆情详细数据
     def publicOpinionDetails(self, json_data):
@@ -84,9 +85,7 @@ class ExtractData(object):
         # 时间戳
         t = time.time()
         TIME_STAMP = int(round(t * 1000))
-        print(TIME_STAMP)
         warningPath = self.warning_result.format(TIME_STAMP)
-        print(warningPath)
         if sign == "2":
             with open(warningPath, 'w', encoding='utf8')as fl:
                 json.dump(results, fl, ensure_ascii=False, sort_keys=True, indent=4)
@@ -152,16 +151,17 @@ class ExtractData(object):
                             # 遍历 舆情详细数据 ,转化成json文件
                             details = self.publicOpinionDetails(json_data)
 
-                            # 先读取json文件中内容并提取,然后把新获取的数据增加进去,然后写入文件
-                            detailslist = self.getJson(details)
-
+                            # # 先读取json文件中内容并提取,然后把新获取的数据增加进去,然后写入文件
+                            # detailslist = self.getJson(details)
                             # if os.path.exists(self.analysis_result):
                             #     analysis_Items['platformDetails'] = detailslist
                             # else:
                             #     analysis_Items['platformDetails'].append(detailslist)
-                            analysis_Items['platformDetails'] = detailslist
+                            analysis_Items['platformDetails'].append(details)
 
                             self.writeFile(analysis_Items, sign="1")
+                            # 这里清空一下列表
+                            analysis_Items['platformDetails'].clear()
                             # 移动存好的json文件到新的目录下
                             self.moveFile(_)
                     else:
